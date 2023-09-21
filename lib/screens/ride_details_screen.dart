@@ -36,7 +36,8 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
       );
     } catch (e) {
       setState(() {
-        errorMessage = "Error: Text-to-speech failed. Please check your device settings.";
+        errorMessage =
+            "Error: Text-to-speech failed. Please check your device settings.";
       });
     }
   }
@@ -56,7 +57,9 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Upcoming Ride Details'),
+        title: Text('Ride Details'),
+        backgroundColor: Colors.deepOrangeAccent,
+        centerTitle: true,
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16.0),
@@ -79,22 +82,40 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                   fontStyle: FontStyle.italic,
                 ),
               ),
-            ListTile(
-              title: Text(
-                "Pickup Location:",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
+            Container(
+              width: MediaQuery.of(context).size.width * 0.93, // 80% width
+              height: MediaQuery.of(context).size.height * 0.6, // 80% height
+              child: Card(
+                elevation: 4.0,
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildInfoRow("Pickup Location:", pickupLocation),
+                      _buildInfoRow("Drop Location:", dropLocation),
+                      _buildInfoRow("Fare Amount:", "\$$fareAmount"),
+                      _buildInfoRow("Payment Method:", paymentMethod),
+                      _buildInfoRow("Customer Name:", customerName),
+                    ].map((widget) => Expanded(child: widget)).toList(),
+                  ),
                 ),
               ),
-              subtitle: Text(pickupLocation),
             ),
-            // ... (other ListTile widgets for ride details)
             SizedBox(height: 24.0),
             Center(
               child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.deepOrangeAccent, // Background color
+                  onPrimary: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(
+                        8.0), // Adjust the radius as needed
+                  ), // Text color
+                ),
                 onPressed: () {
                   _stopSpeaking();
-                  Navigator.of(context).pushReplacement(
+                  Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (context) => HomeScreen(),
                     ),
@@ -105,6 +126,25 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildInfoRow(String title, String value) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          ),
+          Text(
+            value,
+            style: TextStyle(fontSize: 16),
+          ),
+        ],
       ),
     );
   }

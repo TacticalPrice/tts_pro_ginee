@@ -10,6 +10,15 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Next Screen'),
+        backgroundColor: Colors.deepOrangeAccent,
+        centerTitle: true,
+      ),
+      body: Center(
+        child: Text('Next Screen'),
+      ),
+    );
   }
 }
