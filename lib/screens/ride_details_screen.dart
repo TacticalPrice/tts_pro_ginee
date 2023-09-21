@@ -94,27 +94,27 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Ride Details'),
+        title: const Text('Ride Details'),
         backgroundColor: Colors.deepOrangeAccent,
         centerTitle: true,
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
+            const Text(
               'Ride Details',
               style: TextStyle(
                 fontSize: 24.0,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             if (errorMessage.isNotEmpty)
               Text(
                 errorMessage,
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.red,
                   fontStyle: FontStyle.italic,
                 ),
@@ -129,17 +129,22 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _buildInfoRow("Pickup Location:", widget.rideDetailsList[currentIndex].pickupLocation),
-                      _buildInfoRow("Drop Location:", widget.rideDetailsList[currentIndex].dropLocation),
-                      _buildInfoRow("Fare Amount:", "\$${widget.rideDetailsList[currentIndex].fareAmount}"),
-                      _buildInfoRow("Payment Method:", widget.rideDetailsList[currentIndex].paymentMethod),
-                      _buildInfoRow("Customer Name:", widget.rideDetailsList[currentIndex].customerName),
+                      _buildInfoRow("Pickup Location:",
+                          widget.rideDetailsList[currentIndex].pickupLocation),
+                      _buildInfoRow("Drop Location:",
+                          widget.rideDetailsList[currentIndex].dropLocation),
+                      _buildInfoRow("Fare Amount:",
+                          "\$${widget.rideDetailsList[currentIndex].fareAmount}"),
+                      _buildInfoRow("Payment Method:",
+                          widget.rideDetailsList[currentIndex].paymentMethod),
+                      _buildInfoRow("Customer Name:",
+                          widget.rideDetailsList[currentIndex].customerName),
                     ].map((widget) => Expanded(child: widget)).toList(),
                   ),
                 ),
               ),
             ),
-            SizedBox(height: 24.0),
+            const SizedBox(height: 24.0),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -148,27 +153,30 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                     primary: Colors.deepOrangeAccent, // Background color
                     onPrimary: Colors.white, // Text color
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8.0), // Adjust the radius as needed
+                      borderRadius: BorderRadius.circular(
+                          8.0), // Adjust the radius as needed
                     ),
                   ),
                   onPressed: _navigateToPreviousRide,
-                  child: Text('Previous Ride'),
+                  child: const Text('Previous Ride'),
                 ),
-                SizedBox(width: 16.0),
+                const SizedBox(width: 16.0),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     primary: Colors.deepOrangeAccent, // Background color
                     onPrimary: Colors.white, // Text color
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8.0), // Adjust the radius as needed
+                      borderRadius: BorderRadius.circular(
+                          8.0), // Adjust the radius as needed
                     ),
                   ),
                   onPressed: _navigateToNextRide,
-                  child: Text('Next Ride'),
+                  child: const Text('Next Ride'),
                 ),
               ],
             ),
-            SizedBox(height: 16.0), // Added space for the confirmation button
+            const SizedBox(
+                height: 16.0), // Added space for the confirmation button
             if (!confirmationReceived)
               Center(
                 child: ElevatedButton(
@@ -176,17 +184,16 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                     primary: Colors.deepOrangeAccent, // Background color
                     onPrimary: Colors.white, // Text color
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8.0), // Adjust the radius as needed
+                      borderRadius: BorderRadius.circular(
+                          8.0), // Adjust the radius as needed
                     ),
                   ),
                   onPressed: _confirmAndProceed,
-                  child: Text('Confirm and Proceed'),
+                  child: const Text('Confirm and Proceed'),
                 ),
               ),
           ],
         ),
-          
-        
       ),
     );
   }
@@ -199,11 +206,11 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
         children: [
           Text(
             title,
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
           ),
           Text(
             value,
-            style: TextStyle(fontSize: 16),
+            style: const TextStyle(fontSize: 16),
           ),
         ],
       ),

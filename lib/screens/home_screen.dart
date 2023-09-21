@@ -12,11 +12,11 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Next Screen'),
+        title: const Text('Next Screen'),
         backgroundColor: Colors.deepOrangeAccent,
         centerTitle: true,
       ),
-      body: Center(
+      body: const Center(
         child: Text('Next Screen'),
       ),
     );
