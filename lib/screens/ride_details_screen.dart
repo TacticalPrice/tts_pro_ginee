@@ -86,6 +86,8 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
     setState(() {
       confirmationReceived = true;
     });
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => HomeScreen()));
     // Navigate to the next screen (e.g., HomeScreen) when confirmation is received
     // You can implement the navigation logic here.
   }
