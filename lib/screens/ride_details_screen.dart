@@ -3,18 +3,18 @@ import 'package:flutter_tts/flutter_tts.dart';
 import 'package:tts_pro/screens/home_screen.dart';
 
 class RideDetailsScreen extends StatefulWidget {
+  final List<RideDetails> rideDetailsList;
+
+  const RideDetailsScreen({super.key, required this.rideDetailsList});
   @override
   _RideDetailsScreenState createState() => _RideDetailsScreenState();
 }
 
 class _RideDetailsScreenState extends State<RideDetailsScreen> {
   FlutterTts flutterTts = FlutterTts();
-  String pickupLocation = "123 Main St";
-  String dropLocation = "456 Elm St";
-  double fareAmount = 25.0;
-  String paymentMethod = "Credit Card";
-  String customerName = "John Doe";
+  int currentIndex = 0;
   String errorMessage = "";
+  bool confirmationReceived = false;
 
   @override
   void initState() {
@@ -28,11 +28,11 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
       await flutterTts.setLanguage("en-US");
       await flutterTts.setPitch(1.0);
       await flutterTts.speak(
-        "Pickup Location: $pickupLocation. "
-        "Drop Location: $dropLocation. "
-        "Fare Amount: \$$fareAmount. "
-        "Payment Method: $paymentMethod. "
-        "Customer Name: $customerName.",
+        "Pickup Location: ${widget.rideDetailsList[currentIndex].pickupLocation}. "
+        "Drop Location: ${widget.rideDetailsList[currentIndex].dropLocation}. "
+        "Fare Amount: \$${widget.rideDetailsList[currentIndex].fareAmount}. "
+        "Payment Method: ${widget.rideDetailsList[currentIndex].paymentMethod}. "
+        "Customer Name: ${widget.rideDetailsList[currentIndex].customerName}.",
       );
     } catch (e) {
       setState(() {
@@ -51,6 +51,43 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
     flutterTts.stop();
     flutterTts.pause();
     super.dispose();
+  }
+
+  void _navigateToNextRide() {
+    if (currentIndex < widget.rideDetailsList.length - 1) {
+      setState(() {
+        currentIndex++;
+        _stopSpeaking();
+        _speakRideDetails();
+        confirmationReceived = false;
+      });
+    } else {
+      // Handle when there are no more rides
+      // You can display a message or navigate back to a different screen.
+    }
+  }
+
+  // Function to handle navigation to the previous ride
+  void _navigateToPreviousRide() {
+    if (currentIndex > 0) {
+      setState(() {
+        currentIndex--;
+        _stopSpeaking();
+        _speakRideDetails();
+        confirmationReceived = false;
+      });
+    } else {
+      // Handle when there are no previous rides
+      // You can display a message or navigate back to a different screen.
+    }
+  }
+
+  void _confirmAndProceed() {
+    setState(() {
+      confirmationReceived = true;
+    });
+    // Navigate to the next screen (e.g., HomeScreen) when confirmation is received
+    // You can implement the navigation logic here.
   }
 
   @override
@@ -92,40 +129,64 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _buildInfoRow("Pickup Location:", pickupLocation),
-                      _buildInfoRow("Drop Location:", dropLocation),
-                      _buildInfoRow("Fare Amount:", "\$$fareAmount"),
-                      _buildInfoRow("Payment Method:", paymentMethod),
-                      _buildInfoRow("Customer Name:", customerName),
+                      _buildInfoRow("Pickup Location:", widget.rideDetailsList[currentIndex].pickupLocation),
+                      _buildInfoRow("Drop Location:", widget.rideDetailsList[currentIndex].dropLocation),
+                      _buildInfoRow("Fare Amount:", "\$${widget.rideDetailsList[currentIndex].fareAmount}"),
+                      _buildInfoRow("Payment Method:", widget.rideDetailsList[currentIndex].paymentMethod),
+                      _buildInfoRow("Customer Name:", widget.rideDetailsList[currentIndex].customerName),
                     ].map((widget) => Expanded(child: widget)).toList(),
                   ),
                 ),
               ),
             ),
             SizedBox(height: 24.0),
-            Center(
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.deepOrangeAccent, // Background color
-                  onPrimary: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(
-                        8.0), // Adjust the radius as needed
-                  ), // Text color
-                ),
-                onPressed: () {
-                  _stopSpeaking();
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => HomeScreen(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.deepOrangeAccent, // Background color
+                    onPrimary: Colors.white, // Text color
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.0), // Adjust the radius as needed
                     ),
-                  );
-                },
-                child: Text('Confirm and Proceed'),
-              ),
+                  ),
+                  onPressed: _navigateToPreviousRide,
+                  child: Text('Previous Ride'),
+                ),
+                SizedBox(width: 16.0),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.deepOrangeAccent, // Background color
+                    onPrimary: Colors.white, // Text color
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.0), // Adjust the radius as needed
+                    ),
+                  ),
+                  onPressed: _navigateToNextRide,
+                  child: Text('Next Ride'),
+                ),
+              ],
             ),
+            SizedBox(height: 16.0), // Added space for the confirmation button
+            if (!confirmationReceived)
+              Center(
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.deepOrangeAccent, // Background color
+                    onPrimary: Colors.white, // Text color
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.0), // Adjust the radius as needed
+                    ),
+                  ),
+                  onPressed: _confirmAndProceed,
+                  child: Text('Confirm and Proceed'),
+                ),
+              ),
           ],
         ),
+          
+        
       ),
     );
   }
@@ -148,4 +209,20 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
       ),
     );
   }
+}
+
+class RideDetails {
+  final String pickupLocation;
+  final String dropLocation;
+  final double fareAmount;
+  final String paymentMethod;
+  final String customerName;
+
+  RideDetails({
+    required this.pickupLocation,
+    required this.dropLocation,
+    required this.fareAmount,
+    required this.paymentMethod,
+    required this.customerName,
+  });
 }
